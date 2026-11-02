@@ -5,6 +5,8 @@ All exercises will be drawn from Mark Newman's textbook Computational Physics.
 
 I will be utilizing C++20 through out this project.
 
+**NOTE:** Currently going back and modernizing to C++23 and implementing techniques that I have learned through University of Cambridge's MPhil in Scientific Computing. This will be done in my free time, so work will be sporadic."
+
 Covered topics: 
 
 1. **Chapter 2: Python Programming for Physicists**
