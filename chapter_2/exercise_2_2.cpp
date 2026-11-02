@@ -1,73 +1,136 @@
-/*
+/**
  * Exercise 2.2: Altitude of a satellite
  *
- * Textbook: Computational Physics by Mark Newman
+ * Computational Physics by Mark Newman
  */
 
 #include <cmath>
-#include <iomanip>
 #include <iostream>
 #include <numbers>
+#include <print>
+#include <string>
+#include <unordered_map>
+#include <utility>
 
-//Global constants
-namespace Constant
+#include "../include/io_helpers.hpp"
+#include "../include/constants.h"
+
+// Forward declarations
+
+/**
+ * Extracts user input and converts the user input to the correct value in seconds as a function of
+ * user inputted units.
+ *
+ * Ex. 24 hr -> 86,400 sec
+ *
+ * @return: returns a std::pair where first = period converted in to seconds, second = the user inputted unit.
+ */
+std::pair<double, std::string> getOrbitalPeriod();
+
+/**
+ * Converts the inputted period into seconds if provided in  units other than `sec`.
+ *
+ * @param period the user inputted orbital period.
+ * @param unit the user inputted unit of time.
+ *
+ * @return the period converted to units of seconds.
+ */
+double convertPeriodToSec( const double period, const std::string& unit);
+
+/**
+ * Calculates the orbital altitude of a satellite around Earth given a period [s] using
+ *
+ * h = ( (G * M * T^2) / (4 * pi^2) )^(1/3) - R
+ *
+ * @f[
+ *  h \;=\; \sqrt[3]{\frac{G M T^{2}}{4\pi^{2}}} - R
+ * @f]
+ *
+ * where,
+ *
+ * - T: Orbital period
+ * - G: Newton's gravitational constant
+ * - M: Earth's mass
+ * - R: Earth's Radius
+ *
+ * @param period the orbital period of the object in seconds.
+ * @return the orbital altitude of the object in meters.
+ */
+double calcOrbitalAlt(const double period, const std::string& unit);
+
+namespace Data
 {
-constexpr double g_G{6.67E-11};       // Newton's gravitational constant
-constexpr double g_mass{5.97E+24};    // Mass of the earth [kg]
-constexpr double g_radius_e{6.37E+6}; // Earth's radius [m]
+
+    std::unordered_map<std::string, int> units = { {"hr", 0}, {"min", 1}, {"sec", 2}  };
 }
-
-// Function forward decleration
-
-/**
- * Function calculates the orbital height necessary to sustain
- * an orbital period
- *
- * @param period orbital period in seconds
- * @return orbital height in meters
- */
-double altitude_of_satellite(double period);
-
-/**
- * Function converts minutes to seconds
- *
- * @param minutes minutes to convert
- * @return seconds
- */
-double convert_to_sec(double minutes);
 
 int main()
 {
-
-    std::cout << "Input a orbital period in units of minutes: ";
-
-    double minutes{};
-    std::cin >> minutes;
-
-    const double period{convert_to_sec(minutes)};
-
-    std::cout << '\n'
-              << std::setprecision(3) << "For orbital period of " << minutes
-              << " minutes" << '\n'
-              << "Required orbital height: " << altitude_of_satellite(period)
-              << " m" << '\n';
+    const std::pair<double, std::string> usr_input { getOrbitalPeriod() };
+    const double altitude { calcOrbitalAlt(usr_input.first, usr_input.second) };
+    std::println(
+        "The required altitude to maintain a period of {:.2f} {} is {:.3e} m.",
+        usr_input.first,
+        usr_input.second,
+        altitude
+    );
     return 0;
 }
 
-
-
-double altitude_of_satellite(double period)
+std::pair<double, std::string> getOrbitalPeriod()
 {
-    const double numerator{Constant::g_G * Constant::g_mass * (period * period)};
-    constexpr double denominator{4.0 * (std::numbers::pi * std::numbers::pi)};
+    while (true)
+    {
+        std::print("Enter the desired orbital period in hr, min, sec (ex. 24 hr): ");
+        double period{};
+        std::string unit{};
+        std::cin >> period >> unit;
 
-    const double height = std::cbrt((numerator / denominator)) - Constant::g_radius_e;
+        if (period < 0.0)
+        {
+            std::println("Period must be a positive value. Try again.");
+            continue;
+        }
+        if (!Data::units.contains(unit))
+        {
+            std::println("Unit of time must be 'hr', 'min', or 'sec' (ex. 24 hr). Try again.");
+            continue;
+        }
+        if (IO::clearFailedExtraction())
+        {
+            std::println("Incorrect input. Try again.");
+            continue;
+        }
+        IO::ignoreLine();
+        return std::make_pair(period, unit);
 
-    return height;
+    }
 }
 
-double convert_to_sec(double minutes)
+double convertPeriodToSec( const double period, const std::string& unit)
 {
-    const double sec{minutes * 60.0};
-    return sec;
+    switch (Data::units[unit])
+    {
+    case 0:
+        // Converts hr to sec
+        return period * 60.0 * 60.0;
+    case 1:
+        // Converts min to sec
+        return period * 60.0;
+    default:
+        // Keeps as sec if provided as sec
+        return period;
+    }
+}
+
+double calcOrbitalAlt(const double period, const std::string& unit)
+{
+    using namespace Constants;
+
+    const double conv_period{convertPeriodToSec(period, unit)};
+
+    const double numerator { Universal::newtons_grav * Earth::mass * (conv_period * conv_period) };
+    const double denominator { 4.0 * (Universal::pi * std::numbers::pi) };
+    return std::cbrt(numerator / denominator) - Earth::radius;
+
 }
