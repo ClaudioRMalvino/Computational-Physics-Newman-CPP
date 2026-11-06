@@ -83,8 +83,7 @@ either have an older solution in `legacy/` waiting to be ported, or have not bee
 - [x] 2.8: Skipped
 - [x] 2.7: Catalan numbers
 - [x] 2.9: The Madelung constant (OpenMP)
-- [x] 2.10 (a-c): The semi-empirical mass formula
-- [ ] 2.10 (d): The semi-empirical mass formula (legacy)
+- [x] 2.10 (a-d): The semi-empirical mass formula
 - [ ] 2.11: Binomial coefficients (legacy)
 - [ ] 2.12: Prime numbers (legacy)
 - [ ] 2.13: Recursion (legacy)
