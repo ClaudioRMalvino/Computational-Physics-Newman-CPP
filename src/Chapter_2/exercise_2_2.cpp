@@ -1,5 +1,6 @@
 /**
- * Exercise 2.2: Altitude of a satellite
+ * @file exercise_2_2.cpp
+ * @brief Exercise 2.2: Altitude of a satellite
  *
  * Computational Physics by Mark Newman
  */
@@ -12,8 +13,8 @@
 #include <unordered_map>
 #include <utility>
 
-#include "../include/io_helpers.hpp"
-#include "../include/constants.h"
+#include "../../include/io/io_helpers.hpp"
+#include "../../include/common/constants.h"
 
 // Forward declarations
 
@@ -40,11 +41,7 @@ double convertPeriodToSec( const double period, const std::string& unit);
 /**
  * Calculates the orbital altitude of a satellite around Earth given a period [s] using
  *
- * h = ( (G * M * T^2) / (4 * pi^2) )^(1/3) - R
- *
- * @f[
- *  h \;=\; \sqrt[3]{\frac{G M T^{2}}{4\pi^{2}}} - R
- * @f]
+ * @f$ h \;=\; \sqrt[3]{\frac{G M T^{2}}{4\pi^{2}}} - R @f$
  *
  * where,
  *
@@ -112,7 +109,7 @@ double convertPeriodToSec( const double period, const std::string& unit)
     switch (Data::units[unit])
     {
     case 0:
-        // Converts hr to sec
+        // Convert hr to sec
         return period * 60.0 * 60.0;
     case 1:
         // Converts min to sec
@@ -129,8 +126,8 @@ double calcOrbitalAlt(const double period, const std::string& unit)
 
     const double conv_period{convertPeriodToSec(period, unit)};
 
-    const double numerator { Universal::newtons_grav * Earth::mass * (conv_period * conv_period) };
-    const double denominator { 4.0 * (Universal::pi * std::numbers::pi) };
+    const double numerator { Astro::newtons_grav * Earth::mass * (conv_period * conv_period) };
+    const double denominator { 4.0 * (std::numbers::pi * std::numbers::pi) };
     return std::cbrt(numerator / denominator) - Earth::radius;
 
 }

@@ -1,5 +1,6 @@
 /**
- * Exercise 2.1: Another ball dropped from a tower
+ * @file exercise_2_1.cpp
+ * @brief Exercise 2.1: Another ball dropped from a tower
  *
  * Computational Physics by Mark Newman
  */
@@ -8,20 +9,20 @@
 #include <iostream>
 #include <print>
 
-#include "../include/io_helpers.hpp"
-#include "../include/constants.h"
+#include "../../include/io/io_helpers.hpp"
+#include "../../include/common/constants.h"
 
 // Forward declarations
 
 /**
- * Prompts user to input the desired height to release the object from. Checks if the value is positive or if the input
+ * @brief Prompts user to input the desired height to release the object from. Checks if the value is positive or if the input
  * is correct, prompts user to try again if it is not.
  * @return the inputted height as a `double`.
  */
 double getHeight();
 
 /**
- * Calculates and returns the time of flight of an object to hit the ground with zero initially velocity falling from
+ * @brief Calculates and returns the time of flight of an object to hit the ground with zero initially velocity falling from
  * `height` in seconds.
  * @param height the height from which the ball will be released in meters.
  * @return the time in seconds it takes the object to reach the ground.
