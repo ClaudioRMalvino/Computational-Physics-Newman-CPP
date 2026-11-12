@@ -6,6 +6,7 @@
 #pragma once
 
 #include <cmath>
+#include <format>
 #include <optional>
 #include <stdexcept>
 #include <utility>
@@ -14,6 +15,55 @@
 
 namespace Maths
 {
+    /**
+     * @brief Calculates the factorial of a number utilziing iteration method.
+     *
+     * @f$ n! = \product\limits_{k=1}^{n} k @f$
+     *
+     * @param num The number to be factorized.
+     * @return The factorial of `num`
+     */
+    long long factorial(const int num)
+    {
+        if (num < 0)
+        {
+            throw std::invalid_argument(
+                std::format("{}! is invalid. Factorial of a negative number is undefined.", num)
+                );
+        }
+
+        if (num == 0) {return 1;}
+
+        long long result{1};
+
+        for (long long term{1}; term <= num; ++term) {
+            result *= term;
+        }
+
+        return result;
+    }
+
+    /**
+     * @brief Calculates the binomial coefficient utilizing Maths::factorial as a helper function.
+     *
+     * @f$ \binom{n}{k} = \frac{n!}{k!(n-k)!} @f$
+     *
+     * @param total total number of elements, n
+     * @param chosen the number of elements you are choosing, k
+     * @return the total number of combinations given n and k
+     */
+    int binomialCoeff(const int total, const int chosen)
+    {
+        if (total < 0 || chosen < 0) {
+            throw std::invalid_argument(
+                std::format(
+                    "total or chosen can't be a negative value. total = {}, chosen = {}", total, chosen)
+                    );
+        }
+        if (chosen == 0 ) { return 1; }
+
+        return Maths::factorial(total) / (Maths::factorial(chosen) * Maths::factorial(total - chosen));
+    }
     /**
      * @brief Calculates the root of a 2nd degree polynomial utilizing the quadratic formula.
      *
