@@ -1,5 +1,5 @@
 /**
- * @file maths.h
+ * @file maths.hpp/
  * @brief Contains mathematical functions, numerical methods, or physics equations used throughout the project.
  */
 
@@ -10,15 +10,14 @@
 #include <optional>
 #include <stdexcept>
 #include <utility>
-
 #include "constants.h"
 
 namespace Maths
 {
     /**
-     * @brief Calculates the factorial of a number utilziing iteration method.
+     * @brief Calculates the factorial of a number utilzing iteration method.
      *
-     * @f$ n! = \product\limits_{k=1}^{n} k @f$
+     * @f$ n! = \prod\limits_{k=1}^{n} k @f$
      *
      * @param num The number to be factorized.
      * @return The factorial of `num`
@@ -42,7 +41,6 @@ namespace Maths
 
         return result;
     }
-
     /**
      * @brief Calculates the binomial coefficient utilizing Maths::factorial as a helper function.
      *
@@ -64,6 +62,7 @@ namespace Maths
 
         return Maths::factorial(total) / (Maths::factorial(chosen) * Maths::factorial(total - chosen));
     }
+
     /**
      * @brief Calculates the root of a 2nd degree polynomial utilizing the quadratic formula.
      *
@@ -142,7 +141,7 @@ namespace Physics
          * - @f$ a_{4} @f$: Asymmetry coefficient
          * - @f$ a_{5} @f$: Pairing coefficient
          *
-         * @ return The binding energy of element with atomic number Z with mass number A in units of MeV.
+         * @return The binding energy of element with atomic number Z with mass number A in units of MeV.
          */
         double semiEmpiricalMass(const int atomic_num, const int mass_num)
             {
